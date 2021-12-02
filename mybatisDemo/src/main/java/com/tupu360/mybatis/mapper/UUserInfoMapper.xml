@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tupu360.mybatis.mapper.UUserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.tupu360.mybatis.model.UUserInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
+    <result column="deal_password" jdbcType="VARCHAR" property="dealPassword" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
+    <result column="user_type" jdbcType="BIT" property="userType" />
+    <result column="is_vip" jdbcType="BIT" property="isVip" />
+    <result column="is_lock" jdbcType="BIT" property="isLock" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime" />
+    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
+    <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+  </resultMap>
+
+  <resultMap id="OneToOneResultMap" type="com.tupu360.mybatis.model.UUserInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
+    <result column="deal_password" jdbcType="VARCHAR" property="dealPassword" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
+    <result column="user_type" jdbcType="BIT" property="userType" />
+    <result column="is_vip" jdbcType="BIT" property="isVip" />
+    <result column="is_lock" jdbcType="BIT" property="isLock" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime" />
+    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
+    <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+    <association property="idCard" javaType="com.tupu360.mybatis.model.IdCard">
+      <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+      <result column="uid" jdbcType="INTEGER" property="uid" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, user_name, phone, login_password, deal_password, email, qq, wechat, user_type, 
+    is_vip, is_lock, create_time, lock_time, login_count, invite_code
+  </sql>
+
+  <sql id="user_info_column_list">
+    u.id, u.user_name
+  </sql>
+  <sql id="idcard_column_list">
+    i.uid, i.id_card
+  </sql>
+
+  <select id="selectByUid" parameterType="java.lang.Integer" resultMap="OneToOneResultMap">
+    select
+        <include refid="user_info_column_list"/>,
+        <include refid="idcard_column_list"/>
+    from u_user_info u join id_card i on u.id = i.uid
+    where u.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from u_user_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from u_user_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tupu360.mybatis.model.UUserInfo">
+    insert into u_user_info (id, user_name, phone, 
+      login_password, deal_password, email, 
+      qq, wechat, user_type, is_vip, 
+      is_lock, create_time, lock_time, 
+      login_count, invite_code)
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{loginPassword,jdbcType=VARCHAR}, #{dealPassword,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{userType,jdbcType=BIT}, #{isVip,jdbcType=BIT}, 
+      #{isLock,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{lockTime,jdbcType=TIMESTAMP}, 
+      #{loginCount,jdbcType=INTEGER}, #{inviteCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tupu360.mybatis.model.UUserInfo">
+    insert into u_user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="loginPassword != null">
+        login_password,
+      </if>
+      <if test="dealPassword != null">
+        deal_password,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="wechat != null">
+        wechat,
+      </if>
+      <if test="userType != null">
+        user_type,
+      </if>
+      <if test="isVip != null">
+        is_vip,
+      </if>
+      <if test="isLock != null">
+        is_lock,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lockTime != null">
+        lock_time,
+      </if>
+      <if test="loginCount != null">
+        login_count,
+      </if>
+      <if test="inviteCode != null">
+        invite_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="loginPassword != null">
+        #{loginPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="dealPassword != null">
+        #{dealPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="wechat != null">
+        #{wechat,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=BIT},
+      </if>
+      <if test="isVip != null">
+        #{isVip,jdbcType=BIT},
+      </if>
+      <if test="isLock != null">
+        #{isLock,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockTime != null">
+        #{lockTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginCount != null">
+        #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null">
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tupu360.mybatis.model.UUserInfo">
+    update u_user_info
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="loginPassword != null">
+        login_password = #{loginPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="dealPassword != null">
+        deal_password = #{dealPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="wechat != null">
+        wechat = #{wechat,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        user_type = #{userType,jdbcType=BIT},
+      </if>
+      <if test="isVip != null">
+        is_vip = #{isVip,jdbcType=BIT},
+      </if>
+      <if test="isLock != null">
+        is_lock = #{isLock,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockTime != null">
+        lock_time = #{lockTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginCount != null">
+        login_count = #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null">
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tupu360.mybatis.model.UUserInfo">
+    update u_user_info
+    set user_name = #{userName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      login_password = #{loginPassword,jdbcType=VARCHAR},
+      deal_password = #{dealPassword,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      wechat = #{wechat,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=BIT},
+      is_vip = #{isVip,jdbcType=BIT},
+      is_lock = #{isLock,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      lock_time = #{lockTime,jdbcType=TIMESTAMP},
+      login_count = #{loginCount,jdbcType=INTEGER},
+      invite_code = #{inviteCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
